@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10233f">
+<title>Basketball Quest 3.0 | Smart Play PJOK Interaktif</title>
+<style>
+:root{--navy:#10233f;--blue:#1e5aa8;--orange:#f28c28;--cream:#fff8ee;--ink:#1c2b3a;--muted:#64748b;--line:#e2e8f0;--green:#16835d;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#f3f6fb;color:var(--ink);line-height:1.55}
+header{background:linear-gradient(125deg,#10233f,#1d4f91 72%,#f28c28);color:white;padding:26px 18px 34px}
+.hero{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:center}
+.kicker{font-size:.82rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#ffd39f}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:10px 0}
+header p{max-width:680px;color:#edf4ff}
+.ball-art{display:flex;align-items:center;justify-content:center;min-height:180px;font-size:clamp(7rem,17vw,12rem);filter:drop-shadow(0 14px 14px #08172a66)}
+.container{max-width:1100px;margin:auto;padding:18px}
+.progress-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:-22px;position:relative;box-shadow:0 8px 25px #10233f12}
+.progress-head{display:flex;justify-content:space-between;gap:12px;font-weight:750;font-size:.9rem}
+.progress{height:9px;background:#e7edf5;border-radius:99px;overflow:hidden;margin-top:8px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),#ffb75e);transition:width .3s}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+nav button,.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:750;cursor:pointer;font:inherit;font-size:.92rem}
+nav button{background:white;color:var(--navy);border:1px solid var(--line)}nav button.active,nav button:hover{background:var(--navy);color:white}
+.panel{display:none}.panel.active{display:block}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 16px;box-shadow:0 4px 14px #10233f08}
+h2{color:var(--navy);font-size:1.55rem;margin:0 0 8px}h3{color:var(--navy);margin:0 0 8px}
+.lead{color:var(--muted);margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{border:1px solid var(--line);background:#fbfdff;border-radius:13px;padding:15px}
+.tile .emoji{font-size:1.8rem}.tile p{margin:6px 0 0;color:var(--muted);font-size:.94rem}
+.notice{border-left:4px solid var(--orange);background:var(--cream);padding:12px 14px;border-radius:8px;margin:12px 0}
+.success{border-left-color:var(--green);background:#effaf5}
+label{display:block;font-weight:650;margin:10px 0 5px}input[type=text],textarea,select{width:100%;border:1px solid #cbd5e1;border-radius:9px;padding:11px;font:inherit;background:white;color:var(--ink)}textarea{min-height:88px;resize:vertical}
+.option{display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:10px;margin:7px 0;font-weight:500}.option input{margin-top:5px}
+.btn{background:var(--blue);color:white;margin:5px 5px 5px 0}.btn:hover{filter:brightness(1.08)}.btn.orange{background:var(--orange);color:#24170b}.btn.ghost{background:#eaf0f8;color:var(--navy)}.btn.green{background:var(--green)}
+.result{padding:12px;border-radius:10px;background:#edf5ff;margin-top:12px;display:none}.result.show{display:block}
+.video-link{display:block;background:#fff4e7;border:1px solid #ffdfb7;padding:16px;border-radius:12px;color:#81420b;font-weight:800;text-decoration:none}
+.video-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:9px 11px;border-radius:9px;background:#10233f;color:#fff;text-decoration:none;font-weight:750;font-size:.86rem}
+.video-btn:hover{background:#1e5aa8}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#f5f8fc;border-radius:12px;padding:15px;text-align:center}.stat strong{font-size:1.65rem;color:var(--blue);display:block}.stat span{font-size:.84rem;color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.badge{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;background:#fafcff}.badge.locked{opacity:.4;filter:grayscale(1)}.badge b{display:block}
+.small{font-size:.88rem;color:var(--muted)}footer{text-align:center;padding:28px 16px;color:var(--muted);font-size:.85rem}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.ball-art{min-height:90px;justify-content:flex-start;font-size:6rem}.grid,.tiles{grid-template-columns:1fr 1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(2,1fr)}.container{padding:12px}.card{padding:16px}nav button{flex:1 1 auto}}
+@media(max-width:430px){.grid,.tiles{grid-template-columns:1fr}.progress-head{font-size:.82rem}}
+@media print{body{background:white}.progress-wrap,nav,.no-print,.btn,header .ball-art{display:none!important}.container{max-width:none;padding:0}.panel{display:none!important}#hasil.panel{display:block!important}.card{box-shadow:none;break-inside:avoid}.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.scenario-list{display:grid;gap:14px;margin-top:16px}.scenario{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fbfdff}.scenario p{margin:7px 0}.scenario-options{display:grid;gap:8px;margin-top:12px}.scenario-options button{border:1px solid #cbd5e1;border-radius:10px;padding:11px;text-align:left;background:white;color:var(--ink);font:inherit;cursor:pointer}.scenario-options button:hover{border-color:var(--blue);background:#edf5ff}.scenario-options button:disabled{cursor:default;opacity:.85}.scenario-options button.correct{border-color:var(--green);background:#effaf5}.scenario-options button.incorrect{border-color:#d97706;background:#fff7ed}.scenario-feedback{margin-top:10px;padding:11px;border-radius:9px;background:#edf5ff}.scenario-tag{display:inline-block;font-size:.78rem;font-weight:800;color:#1e5aa8;background:#eaf0f8;padding:3px 8px;border-radius:99px}.
+</style>
+</head>
+<body>
+<header>
+ <div class="hero">
+  <div><div class="kicker">🏀 PJOK • Diferensiasi • CRT • Smart Play</div><h1>Basketball Quest 3.0</h1>
+  <p>Pelajari teknik, baca situasi permainan, pilih keputusan taktis, berlatih di lapangan, dan pantau perkembangan belajarmu.</p>
+  <p><strong>Media Pembelajaran Interaktif • SMA Kelas X</strong></p></div>
+  <div class="ball-art" aria-hidden="true">🏀</div>
+ </div>
+</header>
+<main class="container">
+ <div class="progress-wrap">
+  <div class="progress-head"><span>📈 Progress Belajar</span><span id="progressText">0% selesai</span></div>
+  <div class="progress"><span id="progressBar"></span></div>
+ </div>
+ <nav class="no-print" aria-label="Navigasi utama">
+  <button class="active" data-tab="beranda">🏠 Beranda</button><button data-tab="diagnostik">🧠 Diagnostik</button><button data-tab="materi">📚 Materi</button><button data-tab="smartplay">🧠 Smart Play</button><button data-tab="crt">🌱 CRT</button><button data-tab="misi">🎮 Misi</button><button data-tab="kuis">📝 Kuis</button><button data-tab="refleksi">👥 Refleksi</button><button data-tab="hasil">🏆 Hasil</button>
+ </nav>
+
+ <section id="beranda" class="panel active">
+  <div class="card">
+   <h2>👋 Selamat Datang, Basket Explorer!</h2>
+   <p class="lead">Belajar bola basket sesuai kesiapanmu. Ikuti perjalanan dari diagnostik hingga refleksi. Kerja sama dan sikap sportif sama pentingnya dengan skor.</p>
+   <div class="notice">🛡️ <b>Aturan keselamatan:</b> lakukan pemanasan, gunakan lapangan dan bola yang layak, perhatikan jarak antarpemain, ikuti arahan guru, dan hentikan aktivitas jika merasa nyeri atau pusing.</div>
+   <label for="studentName">👤 Nama lengkap</label><input id="studentName" type="text" placeholder="Tulis nama lengkapmu">
+   <label for="studentClass">Kelas</label><input id="studentClass" type="text" placeholder="Contoh: X-1">
+   <p class="small">Progres disimpan pada browser/perangkat yang sedang digunakan. Gunakan perangkat yang sama untuk membuka kembali hasil.</p>
+   <button class="btn orange" data-go="diagnostik">🚀 Mulai Petualangan</button>
+  </div>
+  <div class="card">
+   <h2>🎯 Tujuan Pembelajaran</h2>
+   <div class="tiles">
+    <div class="tile"><div class="emoji">🏀</div><b>Memahami</b><p>Menjelaskan tujuan, aturan sederhana, dan teknik dasar bola basket.</p></div>
+    <div class="tile"><div class="emoji">🎯</div><b>Mempraktikkan</b><p>Melakukan passing, dribbling, shooting, dan pivot sesuai kemampuan.</p></div>
+    <div class="tile"><div class="emoji">🤝</div><b>Berkolaborasi</b><p>Berkomunikasi, sportif, menghargai perbedaan, dan memberi umpan balik.</p></div>
+   </div>
+  </div>
+  <div class="card"><h2>🧭 Peta Petualangan</h2><p>1. Diagnostik → 2. Materi → 3. Smart Play → 4. Aktivitas CRT → 5. Misi praktik → 6. Kuis → 7. Refleksi → 8. Hasil belajar.</p></div>
+ </section>
+
+ <section id="diagnostik" class="panel">
+  <div class="card"><h2>🧠 Diagnostik Kesiapan</h2><p class="lead">Jawab sesuai pemahamanmu. Hasil ini bukan nilai akhir, tetapi membantu memilih jalur latihan yang sesuai.</p><div id="diagQuestions"></div><button class="btn" id="submitDiag">🔎 Lihat Rekomendasi Level</button><div id="diagResult" class="result"></div></div>
+  <div class="card"><h3>🌿 Jalur Belajar Berdiferensiasi</h3><div class="tiles">
+   <div class="tile"><div class="emoji">🔵</div><b>Level 1 — Pemula</b><p>Memahami gerak dasar secara perlahan, berlatih tanpa tekanan, dan fokus pada kontrol bola.</p></div>
+   <div class="tile"><div class="emoji">🟢</div><b>Level 2 — Berkembang</b><p>Menggabungkan gerak dasar dalam latihan berpasangan atau kelompok kecil.</p></div>
+   <div class="tile"><div class="emoji">🟠</div><b>Level 3 — Mahir</b><p>Menganalisis pilihan teknik, mengambil keputusan sederhana, dan membantu teman dengan umpan balik positif.</p></div>
+  </div></div>
+ </section>
+
+ <section id="materi" class="panel">
+  <div class="card"><h2>📚 Materi Inti Bola Basket</h2><p class="lead">Pelajari tujuan gerak, petunjuk teknik, dan contoh penerapannya. Klik kartu untuk meninjau materi.</p>
+   <div class="tiles">
+    <div class="tile"><div class="emoji">🤲</div><b>Passing</b><p>Mengoper bola kepada teman. Chest pass dilakukan dari depan dada; bounce pass diarahkan memantul ke lantai menuju penerima.</p><a class="video-btn" href="https://youtu.be/SbOsxamKyzY?si=DzqUAPr1orKpWTEH" target="_blank" rel="noopener">▶ Tonton Tutorial Passing ↗</a></div>
+    <div class="tile"><div class="emoji">🏃</div><b>Dribbling</b><p>Memantulkan bola dengan satu tangan sambil mengontrol arah dan kecepatan. Pandangan sesekali ke depan untuk membaca situasi.</p><a class="video-btn" href="https://youtu.be/nNog2cQ2cuE?si=6rJzBkgmWZgKwYsy" target="_blank" rel="noopener">▶ Tonton Tutorial Dribbling ↗</a></div>
+    <div class="tile"><div class="emoji">🎯</div><b>Shooting</b><p>Mengarahkan bola ke ring dengan koordinasi kaki, tangan, dan fokus. Latihan dimulai dari jarak yang sesuai kemampuan.</p><a class="video-btn" href="https://youtu.be/DQLTIqgSgiQ?si=tGO8Pxo4AJ7XmFAS" target="_blank" rel="noopener">▶ Tonton Tutorial Shooting ↗</a></div>
+    <div class="tile"><div class="emoji">🔄</div><b>Pivot</b><p>Memutar tubuh dengan satu kaki sebagai poros yang tetap menapak, sesuai aturan langkah dalam bola basket.</p><a class="video-btn" href="https://youtu.be/kXXJK4h2_UY?si=JTV892ifY2q45Ptr" target="_blank" rel="noopener">▶ Tonton Tutorial Pivot ↗</a></div>
+    <div class="tile"><div class="emoji">🛡️</div><b>Defense</b><p>Menjaga lawan dengan posisi seimbang, bergerak menyamping, dan tetap menghindari kontak berbahaya.</p><a class="video-btn" href="https://youtu.be/0V92sII3EFw?si=4sK-Rme40fhzi4fN" target="_blank" rel="noopener">▶ Tonton Tutorial Defense ↗</a></div>
+    <div class="tile"><div class="emoji">🤝</div><b>Kerja Sama</b><p>Mencari ruang, berkomunikasi, memberi operan yang aman, dan menghargai kontribusi setiap anggota tim.</p><a class="video-btn" href="https://youtube.com/shorts/3KmwQfWwYFA?si=MEuFqPTW8-Pok72y" target="_blank" rel="noopener">▶ Tonton Contoh Kerja Sama ↗</a></div>
+   </div>
+  </div>
+  <div class="card"><h2>📏 Aturan Dasar yang Perlu Dipahami</h2>
+   <ul><li>Tujuan permainan adalah mencetak angka dengan memasukkan bola ke ring lawan dan mencegah lawan mencetak angka.</li><li>Dribbling digunakan untuk bergerak sambil menguasai bola.</li><li>Berjalan atau berlari sambil membawa bola tanpa dribble dapat menjadi pelanggaran traveling.</li><li>Dribble kembali setelah dribble dihentikan dan bola dikuasai dapat menjadi pelanggaran double dribble.</li><li>Permainan memerlukan kerja sama, komunikasi, kontrol diri, dan sportivitas.</li></ul>
+   <div class="notice">Catatan: aturan pertandingan dapat memiliki rincian berbeda menurut peraturan yang digunakan. Ikuti penjelasan guru untuk konteks pembelajaran.</div>
+  </div>
+  <div class="card"><h2>🎬 Video Demonstrasi</h2><p>Gunakan video sebagai referensi visual, lalu praktikkan teknik dengan pengawasan guru.</p><a class="video-link" href="https://youtu.be/nNog2cQ2cuE?si=6rJzBkgmWZgKwYsy" target="_blank" rel="noopener">▶️ Cari Video Teknik Dasar Bola Basket di YouTube ↗</a></div>
+ </section>
+
+
+ <section id="smartplay" class="panel">
+  <div class="card">
+   <h2>🧠 Smart Play Simulator</h2>
+   <p class="lead">Baca situasi permainan, pilih keputusan terbaik, lalu pelajari alasan taktisnya. Setelah itu, praktikkan bersama guru di lapangan.</p>
+   <div class="notice" id="smartHint">Selesaikan diagnostik untuk melihat rekomendasi jalur belajar. Kamu tetap boleh mencoba skenario kapan saja.</div>
+   <div class="stat-grid">
+    <div class="stat"><strong id="smartScore">0/3</strong><span>Keputusan tepat</span></div>
+    <div class="stat"><strong id="smartDone">0/3</strong><span>Skenario dijawab</span></div>
+    <div class="stat"><strong id="smartLevel">—</strong><span>Jalur belajar</span></div>
+    <div class="stat"><strong>🏀</strong><span>Belajar taktis</span></div>
+   </div>
+   <div id="scenarioList" class="scenario-list"></div>
+   <button class="btn ghost" id="resetSmart" type="button">↻ Ulangi semua skenario</button>
+  </div>
+  <div class="card">
+   <h2>🎟️ Skill Passport</h2>
+   <p class="lead">Setelah mencoba praktik lapangan, centang keterampilan yang menurutmu sudah mulai dikuasai. Minta guru memvalidasi hasilnya.</p>
+   <label class="option"><input type="checkbox" class="skill-item"> Saya dapat melakukan passing dengan arah yang terkontrol.</label>
+   <label class="option"><input type="checkbox" class="skill-item"> Saya dapat melakukan dribbling sambil menjaga kontrol bola.</label>
+   <label class="option"><input type="checkbox" class="skill-item"> Saya dapat memilih kapan perlu passing atau dribbling.</label>
+   <label class="option"><input type="checkbox" class="skill-item"> Saya dapat mempertimbangkan peluang sebelum melakukan shooting.</label>
+   <label class="option"><input type="checkbox" class="skill-item"> Saya berkomunikasi dan bekerja sama dengan teman.</label>
+   <label for="skillNext">Target latihan saya berikutnya</label>
+   <textarea id="skillNext" placeholder="Contoh: berlatih passing agar lebih akurat saat bergerak..."></textarea>
+   <button class="btn green" id="saveSkill" type="button">💾 Simpan Skill Passport</button>
+   <div id="skillResult" class="result"></div>
+   <p class="small">Catatan: Skill Passport adalah refleksi diri, bukan pengganti penilaian praktik oleh guru.</p>
+  </div>
+ </section>
+
+ <section id="crt" class="panel">
+  <div class="card"><h2>🌱 CRT — Bola Basket dalam Konteks Kita</h2><p class="lead">Culturally Responsive Teaching menghubungkan pembelajaran dengan pengalaman, bahasa, lingkungan, nilai kebersamaan, dan keberagaman peserta didik. Lengkapi aktivitas berikut.</p>
+   <label for="crt1">1️⃣ 🌏 Gerak dari Lingkunganku — Di mana kamu pernah bermain atau melihat permainan bola basket?</label><textarea id="crt1" placeholder="Contoh: lapangan sekolah, lingkungan rumah, atau menonton pertandingan..."></textarea>
+   <label for="crt2">2️⃣ 🏘️ Budaya Gerakku — Permainan atau olahraga apa di lingkunganmu yang mengajarkan kerja sama seperti bola basket?</label><textarea id="crt2" placeholder="Ceritakan pengalamanmu..."></textarea>
+   <label for="crt3">3️⃣ 🗣️ Bahasa yang Aku Pahami — Jelaskan arti passing atau dribbling dengan bahasa yang mudah dipahami temanmu.</label><textarea id="crt3" placeholder="Gunakan bahasa sederhana dan tetap tepat..."></textarea>
+   <label>4️⃣ 🤝 Teman dari Berbagai Pengalaman — Pilih sikap yang akan kamu lakukan (boleh lebih dari satu).</label>
+   <label class="option"><input type="checkbox" id="crt4a"> Memberi semangat kepada teman yang baru belajar.</label>
+   <label class="option"><input type="checkbox" id="crt4b"> Memberi saran yang sopan dan spesifik.</label>
+   <label class="option"><input type="checkbox" id="crt4c"> Menghargai teman dengan kemampuan fisik berbeda.</label>
+   <label class="option"><input type="checkbox" id="crt4d"> Membagi kesempatan bermain secara adil.</label>
+   <label for="crt5">5️⃣ 🎯 Pilih Jalur Belajarmu — Jalur mana yang paling sesuai dengan kesiapanmu?</label><select id="crt5"><option value="">Pilih jalur</option><option>Pemula — memahami dan mencoba gerak dasar</option><option>Berkembang — menggabungkan teknik</option><option>Mahir — menganalisis dan membantu teman</option></select>
+   <label for="crt6">6️⃣ 🧩 Bola Basket di Sekitarku — Bagaimana teknik bola basket dapat digunakan dalam permainan atau kegiatan sekolahmu?</label><textarea id="crt6" placeholder="Contoh penerapan dalam permainan kecil atau kegiatan kelas..."></textarea>
+   <label for="crt7">7️⃣ ❤️ Cerita Setelah Bergerak — Apa yang kamu rasakan dan pelajari dari aktivitas ini?</label><textarea id="crt7" placeholder="Ceritakan pengalamanmu dengan jujur..."></textarea>
+   <button class="btn green" id="saveCRT">💾 Simpan 7 Aktivitas CRT</button><div id="crtResult" class="result"></div>
+  </div>
+ </section>
+
+ <section id="misi" class="panel">
+  <div class="card"><h2>🎮 Misi Basketball Quest</h2><p class="lead">Selesaikan aktivitas berikut sesuai arahan guru. Utamakan teknik yang aman, bukan kecepatan semata.</p><div class="notice" id="missionHint">Selesaikan diagnostik untuk melihat rekomendasi jalur belajar.</div>
+   <div id="missionList">
+    <label class="option"><input type="checkbox" class="mission" data-name="Pemanasan"> 🔥 Misi 1 — Melakukan pemanasan dinamis bersama kelompok.</label>
+    <label class="option"><input type="checkbox" class="mission" data-name="Passing"> 🤲 Misi 2 — Mempraktikkan chest pass dan bounce pass berpasangan.</label>
+    <label class="option"><input type="checkbox" class="mission" data-name="Dribbling"> 🏃 Misi 3 — Mempraktikkan dribbling di tempat dan bergerak pada lintasan aman.</label>
+    <label class="option"><input type="checkbox" class="mission" data-name="Shooting"> 🎯 Misi 4 — Berlatih shooting dari jarak yang sesuai kemampuan.</label>
+    <label class="option"><input type="checkbox" class="mission" data-name="Pivot dan keputusan"> 🔄 Misi 5 — Mempraktikkan pivot dan memilih operan dalam permainan kecil.</label>
+    <label class="option"><input type="checkbox" class="mission" data-name="Sportivitas"> 🤝 Misi 6 — Menunjukkan komunikasi, sportivitas, dan kerja sama.</label>
+   </div>
+  </div>
+  <div class="card"><h2>👥 Peer Assessment — Umpan Balik Teman</h2><p class="small">Amati dengan sopan. Berikan umpan balik berdasarkan hal yang terlihat, bukan mengejek atau membandingkan fisik.</p>
+   <label for="peerName">Nama teman yang diamati</label><input id="peerName" type="text" placeholder="Nama teman">
+   <div id="peerChecks">
+    <label class="option"><input type="checkbox" class="peer"> Posisi tubuh seimbang dan siap.</label>
+    <label class="option"><input type="checkbox" class="peer"> Passing diarahkan kepada teman dengan kontrol.</label>
+    <label class="option"><input type="checkbox" class="peer"> Dribbling dilakukan dengan kontrol bola.</label>
+    <label class="option"><input type="checkbox" class="peer"> Shooting dilakukan dengan koordinasi yang sesuai.</label>
+    <label class="option"><input type="checkbox" class="peer"> Berkomunikasi dan menghargai anggota tim.</label>
+   </div>
+   <label for="peerFeedback">Saran positif untuk teman</label><textarea id="peerFeedback" placeholder="Contoh: operanmu sudah terarah; coba tekuk lutut sedikit saat bersiap..."></textarea>
+   <button class="btn" id="savePeer">💾 Simpan Peer Assessment</button><div id="peerResult" class="result"></div>
+  </div>
+ </section>
+
+ <section id="kuis" class="panel">
+  <div class="card"><h2>📝 Kuis Formatif</h2><p class="lead">Pilih satu jawaban terbaik untuk setiap pertanyaan. Nilai dihitung otomatis setelah diperiksa.</p><div id="quizQuestions"></div><button class="btn orange" id="submitQuiz">Periksa Jawaban</button><button class="btn ghost" id="resetQuiz">Ulangi Kuis</button><div id="quizResult" class="result"></div></div>
+ </section>
+
+ <section id="refleksi" class="panel">
+  <div class="card"><h2>👤 Refleksi & Assessment as Learning</h2>
+   <label for="feeling">Apa yang paling kamu rasakan setelah belajar?</label><select id="feeling"><option value="">Pilih jawaban</option><option>Senang dan lebih percaya diri</option><option>Mulai memahami, tetapi masih perlu latihan</option><option>Masih kesulitan dan membutuhkan bimbingan</option><option>Menikmati kerja sama dengan teman</option></select>
+   <label for="confidence">Tingkat keyakinan memahami teknik dasar (1–3)</label><select id="confidence"><option value="">Pilih tingkat</option><option value="1">1 — Perlu banyak bimbingan</option><option value="2">2 — Mulai memahami</option><option value="3">3 — Cukup yakin</option></select>
+   <label for="mastered">Yang sudah saya kuasai</label><textarea id="mastered" placeholder="Tuliskan konsep atau teknik yang sudah dipahami..."></textarea>
+   <label for="improve">Yang ingin saya perbaiki</label><textarea id="improve" placeholder="Tuliskan hal yang masih perlu dilatih..."></textarea>
+   <label for="conclusion">Kesimpulan saya setelah belajar</label><textarea id="conclusion" placeholder="Apa manfaat teknik dan kerja sama dalam bola basket?"></textarea>
+   <button class="btn green" id="saveReflection">💾 Simpan Refleksi</button><div id="reflectionResult" class="result"></div>
+  </div>
+ </section>
+
+ <section id="hasil" class="panel">
+  <div class="card"><h2>🏆 Dashboard Hasil Belajar</h2><p class="lead">Rekap perjalanan belajar yang tersimpan pada perangkat ini.</p>
+   <div class="stat-grid">
+    <div class="stat"><strong id="statMissions">0/6</strong><span>Misi selesai</span></div>
+    <div class="stat"><strong id="statQuiz">—</strong><span>Skor kuis</span></div>
+    <div class="stat"><strong id="statPeer">0/5</strong><span>Peer assessment</span></div>
+    <div class="stat"><strong id="statCRT">0/7</strong><span>Aktivitas CRT</span></div>
+   </div><hr>
+   <h3>👤 Profil & Perkembangan</h3><div id="profileSummary">Lengkapi aktivitas untuk melihat rekap.</div><hr>
+   <h3>🌱 Refleksi CRT — Cerita Belajarku</h3><div id="crtSummary" class="small">Belum ada aktivitas CRT yang disimpan.</div><hr>
+   <h3>📝 Refleksi Pembelajaran</h3><div id="reflectionSummary" class="small">Belum ada refleksi.</div><hr>
+   <h3>💡 Kesimpulan & Saran Pembelajaran</h3><div id="suggestions" class="notice">Lengkapi aktivitas pembelajaran untuk mendapatkan saran yang lebih spesifik.</div><hr>
+   <h3>🏅 Pencapaian</h3><div class="badges" id="badgeList"></div>
+   <div class="no-print" style="margin-top:18px"><button class="btn orange" id="printBtn">🖨️ Cetak Rekap / Simpan PDF</button><button class="btn green" id="waBtn">📲 Kirim Rekap via WhatsApp</button><button class="btn ghost" id="refreshBtn">🔄 Perbarui Hasil</button><button class="btn ghost" id="resetAll">Hapus Data di Perangkat Ini</button></div>
+   <p class="small">Untuk PDF, pilih “Save as PDF / Simpan sebagai PDF” pada dialog cetak browser. WhatsApp akan membuka pesan rekap yang bisa ditinjau sebelum dikirim.</p>
+  </div>
+ </section>
+</main>
+<footer>© Basketball Quest 3.0 • Smart Play • Media Pembelajaran PJOK • Diferensiasi + CRT • Gunakan dengan bimbingan guru</footer>
+<script>
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const KEY='basketballQuest2Data';
+const state={diag:null,level:'Belum ditentukan',quizScore:null,quizAnswers:{},crtSaved:false,peerSaved:false,reflectionSaved:false};
+const SMART_KEY='basketballQuest3SmartData';
+let smartData={answers:{},skills:[],nextTarget:''};
+const scenarios=[
+ {title:'Situasi 1 — Teman bebas',tag:'Passing',story:'Kamu menguasai bola. Seorang teman berada dekat ring tanpa penjagaan ketat, sementara kamu dijaga lawan.',options:['Memaksakan dribbling melewati dua pemain','Melakukan passing terarah kepada teman yang bebas','Langsung shooting dari posisi yang tidak seimbang'],correct:1,why:'Passing kepada teman yang berada di posisi lebih baik dapat menciptakan peluang yang lebih efektif. Tetap pastikan operan aman dan terarah.',hint:'Pemula: cari teman yang mudah menerima bola. Berkembang: amati posisi lawan. Mahir: pertimbangkan waktu dan jalur operan.'},
+ {title:'Situasi 2 — Ruang di depan',tag:'Dribbling',story:'Kamu membawa bola dan ruang di depan masih terbuka. Rekan satu tim bergerak mencari posisi.',options:['Dribbling terkontrol sambil mengamati lapangan','Memantulkan bola setinggi mungkin tanpa melihat depan','Berhenti lalu berjalan membawa bola tanpa dribble'],correct:0,why:'Dribbling terkontrol membantu bergerak sambil tetap membaca posisi teman dan lawan. Jaga bola tetap dalam kendali.',hint:'Fokus pada kontrol bola dan sesekali angkat pandangan untuk membaca situasi.'},
+ {title:'Situasi 3 — Peluang menembak',tag:'Shooting',story:'Kamu menerima bola dalam posisi cukup seimbang dan memiliki ruang untuk menembak. Rekan lain dijaga lawan.',options:['Menembak dengan teknik yang terkontrol jika jarak sesuai kemampuan','Menembak sambil membelakangi ring','Melempar bola sekuat mungkin tanpa memperhatikan arah'],correct:0,why:'Pilih shooting ketika posisi, keseimbangan, jarak, dan peluang mendukung. Jika peluang kurang baik, pertimbangkan passing kepada rekan.',hint:'Pemula: utamakan posisi seimbang. Berkembang: nilai jarak dan penjagaan. Mahir: bandingkan peluang shooting dan passing.'}
+];
+const diagData=[
+ {q:'Teknik untuk mengoper bola dari depan dada kepada teman disebut…',a:['Chest pass','Dribbling','Shooting','Pivot'],correct:0},
+ {q:'Tujuan utama dribbling adalah…',a:['Memantulkan bola sambil bergerak dan mengontrolnya','Menendang bola','Menghentikan permainan','Melakukan lemparan ke dalam'],correct:0},
+ {q:'Saat melakukan shooting, hal yang perlu diperhatikan adalah…',a:['Koordinasi tubuh dan arah ke ring','Menutup mata','Mendorong teman','Selalu melompat setinggi mungkin'],correct:0},
+ {q:'Gerakan berputar dengan satu kaki sebagai poros disebut…',a:['Pivot','Passing','Rebound','Dribbling'],correct:0},
+ {q:'Sikap terbaik saat teman belum mahir bermain adalah…',a:['Mengejeknya','Tidak memberinya kesempatan','Memberi dukungan dan saran yang sopan','Mengambil alih semua tugas'],correct:2}
+];
+const quizData=[
+ {q:'Operan yang dilakukan dari depan dada menuju teman disebut…',a:['Chest pass','Bounce pass','Shooting','Pivot'],c:0,why:'Chest pass dilakukan dari depan dada menuju penerima.'},
+ {q:'Saat dribbling, bola dipantulkan menggunakan…',a:['Kaki','Satu tangan secara bergantian sesuai kebutuhan','Kepala','Kedua tangan bersamaan setiap pantulan'],c:1,why:'Dribbling dilakukan dengan satu tangan; pemain dapat mengganti tangan untuk mengontrol arah.'},
+ {q:'Operan yang diarahkan memantul ke lantai disebut…',a:['Chest pass','Overhead pass','Bounce pass','Shooting'],c:2,why:'Bounce pass memantulkan bola ke lantai menuju teman.'},
+ {q:'Gerakan memutar tubuh dengan satu kaki sebagai poros disebut…',a:['Pivot','Dribbling','Rebound','Lay-up'],c:0,why:'Pivot membantu melindungi bola dan mencari pilihan operan dengan satu kaki sebagai poros.'},
+ {q:'Tim yang baik ketika bermain bola basket adalah tim yang…',a:['Hanya memberi bola kepada pemain terbaik','Mengabaikan aturan','Bekerja sama, berkomunikasi, dan sportif','Menyalahkan teman saat gagal'],c:2,why:'Kerja sama dan sportivitas mendukung permainan yang aman dan efektif.'},
+ {q:'Seorang pemain berhenti dribble lalu mulai dribble lagi. Hal ini dapat disebut…',a:['Double dribble','Chest pass','Pivot yang benar','Shooting'],c:0,why:'Memulai dribble lagi setelah dribble dihentikan dan bola dikuasai dapat menjadi pelanggaran double dribble.'}
+];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()))}catch(e){}}
+function collect(){
+ return {name:$('#studentName').value,className:$('#studentClass').value,diag:state.diag,level:state.level,quizScore:state.quizScore,quizAnswers:state.quizAnswers,crtSaved:state.crtSaved,crt:[1,2,3,6,7].map(n=>$('#crt'+n).value),crtChecks:[...'abcd'].map(x=>$('#crt4'+x).checked),crt5:$('#crt5').value,missions:$$('.mission').map(x=>x.checked),peerName:$('#peerName').value,peer:$$('.peer').map(x=>x.checked),peerFeedback:$('#peerFeedback').value,peerSaved:state.peerSaved,feeling:$('#feeling').value,confidence:$('#confidence').value,mastered:$('#mastered').value,improve:$('#improve').value,conclusion:$('#conclusion').value,reflectionSaved:state.reflectionSaved,smartData:smartData};
+}
+function load(){
+ try{
+  const d=JSON.parse(localStorage.getItem(KEY)||'null');
+  if(d){
+   $('#studentName').value=d.name||'';$('#studentClass').value=d.className||'';state.diag=d.diag??null;state.level=d.level||'Belum ditentukan';state.quizScore=d.quizScore??null;state.quizAnswers=d.quizAnswers||{};state.crtSaved=!!d.crtSaved;state.peerSaved=!!d.peerSaved;state.reflectionSaved=!!d.reflectionSaved;
+   [1,2,3,6,7].forEach((n,i)=>$('#crt'+n).value=(d.crt||[])[i]||'');(d.crtChecks||[]).forEach((v,i)=>$('#crt4'+String.fromCharCode(97+i)).checked=v);$('#crt5').value=d.crt5||'';
+   $$('.mission').forEach((x,i)=>x.checked=!!(d.missions||[])[i]);$('#peerName').value=d.peerName||'';$('#peerFeedback').value=d.peerFeedback||'';$$('.peer').forEach((x,i)=>x.checked=!!(d.peer||[])[i]);
+   ['feeling','confidence','mastered','improve','conclusion'].forEach(k=>$('#'+k).value=d[k]||'');
+   if(state.diag!==null)showDiagResult();if(state.quizScore!==null)showQuizResult();
+  }
+ }catch(e){}
+ try{smartData=JSON.parse(localStorage.getItem(SMART_KEY)||'null')||smartData;}catch(e){}
+ renderSmart();
+}
+function setTab(id){$$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));$$('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='hasil')renderResults();if(id==='smartplay')renderSmart();window.scrollTo({top:0,behavior:'smooth'});}
+$$('nav button').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.go)));
+function renderOptions(container,items,name){container.innerHTML=items.map((t,i)=>`<label class="option"><input type="radio" name="${name}" value="${i}"> ${String.fromCharCode(65+i)}. ${t}</label>`).join('');}
+diagData.forEach((q,i)=>{const div=document.createElement('div');div.innerHTML=`<h3>${i+1}. ${q.q}</h3><div id="diag${i}"></div>`;$('#diagQuestions').appendChild(div);renderOptions($('#diag'+i),q.a,'diagQ'+i)});
+$('#submitDiag').addEventListener('click',()=>{
+ let score=0,answered=0;diagData.forEach((q,i)=>{const v=$(`input[name="diagQ${i}"]:checked`);if(v){answered++;if(+v.value===q.correct)score++}});
+ if(answered<diagData.length){showMessage('diagResult',`Jawab semua ${diagData.length} pertanyaan terlebih dahulu.`);return}
+ state.diag=score;state.level=score<=2?'Level 1 — Pemula':score<=4?'Level 2 — Berkembang':'Level 3 — Mahir';showDiagResult();save();updateProgress();
+});
+function showDiagResult(){showMessage('diagResult',`Skor diagnostik: <b>${state.diag}/${diagData.length}</b><br>Rekomendasi: <b>${state.level}</b><br>${state.diag<=2?'Mulai dari memahami istilah dan mengontrol bola dengan latihan sederhana.':state.diag<=4?'Gabungkan passing dan dribbling dalam latihan berpasangan.':'Coba analisis keputusan dalam permainan kecil serta berikan umpan balik positif kepada teman.'}`);$('#missionHint').textContent='Rekomendasi jalur belajarmu: '+state.level+'. Pilih tantangan yang aman dan ikuti arahan guru.'}
+quizData.forEach((q,i)=>{const div=document.createElement('div');div.className='quiz-item';div.innerHTML=`<h3>${i+1}. ${q.q}</h3><div id="quiz${i}"></div><p class="small" id="why${i}" style="display:none"></p>`;$('#quizQuestions').appendChild(div);renderOptions($('#quiz'+i),q.a,'quizQ'+i)});
+$('#submitQuiz').addEventListener('click',()=>{let score=0,answered=0;const answers={};quizData.forEach((q,i)=>{const v=$(`input[name="quizQ${i}"]:checked`);if(v){answered++;answers[i]=+v.value;if(+v.value===q.c)score++}});if(answered<quizData.length){showMessage('quizResult',`Jawab semua ${quizData.length} pertanyaan sebelum memeriksa hasil.`);return}state.quizScore=Math.round(score/quizData.length*100);state.quizAnswers=answers;showQuizResult();save();updateProgress()});
+function showQuizResult(){if(state.quizScore===null)return;showMessage('quizResult',`Skor kuis: <b>${state.quizScore}/100</b>. ${state.quizScore>=80?'Hebat! Pemahaman konsepmu sudah kuat.':state.quizScore>=60?'Bagus, tinjau kembali materi pada jawaban yang keliru.':'Jangan menyerah. Baca materi lagi lalu coba kuis sekali lagi.'}`);quizData.forEach((q,i)=>{const el=$('#why'+i);if(el){el.style.display='block';el.textContent=(state.quizAnswers[i]===q.c?'✓ Benar. ':'↻ Tinjau kembali. ')+q.why}})}
+$('#resetQuiz').addEventListener('click',()=>{ $$('input[name^="quizQ"]').forEach(x=>x.checked=false);state.quizScore=null;state.quizAnswers={};$('#quizResult').classList.remove('show');$$('[id^="why"]').forEach(x=>x.style.display='none');save();updateProgress()});
+$('#saveCRT').addEventListener('click',()=>{state.crtSaved=true;save();showMessage('crtResult','Aktivitas CRT tersimpan pada browser ini. Buka Dashboard Hasil untuk melihat ringkasannya.');updateProgress()});
+$('#savePeer').addEventListener('click',()=>{state.peerSaved=true;save();showMessage('peerResult','Peer assessment tersimpan. Skor checklist menunjukkan indikator yang teramati, bukan nilai untuk merendahkan teman.');updateProgress()});
+$('#saveReflection').addEventListener('click',()=>{state.reflectionSaved=true;save();showMessage('reflectionResult','Refleksi tersimpan. Kamu dapat melihatnya pada Dashboard Hasil.');updateProgress()});
+$$('.mission').forEach(x=>x.addEventListener('change',()=>{save();updateProgress()}));
+['studentName','studentClass','peerName','peerFeedback','feeling','confidence','mastered','improve','conclusion','crt1','crt2','crt3','crt5','crt6','crt7',...['a','b','c','d'].map(x=>'crt4'+x)].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener('change',save)});
+$$('.peer').forEach(x=>x.addEventListener('change',save));
+
+function saveSmart(){try{localStorage.setItem(SMART_KEY,JSON.stringify(smartData));}catch(e){}save();}
+function renderSmart(){
+ const host=$('#scenarioList'); if(!host)return;
+ host.innerHTML=scenarios.map((sc,i)=>{const answered=Object.prototype.hasOwnProperty.call(smartData.answers,i);const chosen=smartData.answers[i];return `<article class="scenario"><span class="scenario-tag">${sc.tag}</span><h3>${sc.title}</h3><p>${sc.story}</p><div class="scenario-options">${sc.options.map((op,j)=>`<button type="button" data-scenario="${i}" data-choice="${j}" ${answered?'disabled':''} class="${answered&&j===sc.correct?'correct':answered&&j===chosen&&j!==sc.correct?'incorrect':''}">${String.fromCharCode(65+j)}. ${op}</button>`).join('')}</div>${answered?`<div class="scenario-feedback"><b>${chosen===sc.correct?'✓ Keputusan tepat':'↻ Coba pikirkan lagi'}</b><br>${sc.why}<p class="small">Petunjuk belajar: ${sc.hint}</p></div>`:''}</article>`}).join('');
+ host.querySelectorAll('button[data-scenario]').forEach(btn=>btn.addEventListener('click',()=>{const i=+btn.dataset.scenario,j=+btn.dataset.choice;if(Object.prototype.hasOwnProperty.call(smartData.answers,i))return;smartData.answers[i]=j;saveSmart();renderSmart();updateSmartStats();updateProgress();}));
+ $$('.skill-item').forEach((el,i)=>el.checked=!!smartData.skills?.[i]);$('#skillNext').value=smartData.nextTarget||'';updateSmartStats();
+}
+function updateSmartStats(){const done=Object.keys(smartData.answers||{}).length;const score=Object.entries(smartData.answers||{}).filter(([i,a])=>scenarios[+i]&&scenarios[+i].correct===a).length;$('#smartScore').textContent=score+'/3';$('#smartDone').textContent=done+'/3';$('#smartLevel').textContent=state.level==='Belum ditentukan'?'—':state.level.replace('Level ','L');const hint=$('#smartHint');if(hint)hint.textContent=state.diag===null?'Selesaikan diagnostik untuk melihat rekomendasi jalur belajar. Setelah itu, coba skenario dan lanjutkan dengan praktik lapangan.':'Jalur belajarmu: '+state.level+'. '+(state.diag<=2?'Mulai dengan membaca pilihan dan mengenali tindakan dasar.':state.diag<=4?'Perhatikan posisi teman, lawan, dan ruang sebelum memilih tindakan.':'Bandingkan beberapa pilihan dan jelaskan alasan taktis dari keputusanmu.');}
+$('#resetSmart').addEventListener('click',()=>{smartData.answers={};saveSmart();renderSmart();updateProgress();});
+$('#saveSkill').addEventListener('click',()=>{smartData.skills=$$('.skill-item').map(x=>x.checked);smartData.nextTarget=$('#skillNext').value.trim();saveSmart();showMessage('skillResult','Skill Passport tersimpan. Gunakan target latihan ini saat praktik berikutnya dan minta guru memvalidasi keterampilanmu.');updateProgress();});
+$$('.skill-item').forEach(x=>x.addEventListener('change',()=>{smartData.skills=$$('.skill-item').map(y=>y.checked);saveSmart();}));
+$('#skillNext').addEventListener('change',()=>{smartData.nextTarget=$('#skillNext').value;saveSmart();});
+
+function showMessage(id,html){const el=$('#'+id);el.innerHTML=html;el.classList.add('show')}
+function updateProgress(){const done=[state.diag!==null,state.crtSaved,$$('.mission:checked').length===6,state.peerSaved,state.quizScore!==null,state.reflectionSaved,Object.keys(smartData.answers||{}).length===3,(smartData.skills||[]).some(Boolean)].filter(Boolean).length;const pct=Math.round(done/8*100);$('#progressText').textContent=pct+'% selesai';$('#progressBar').style.width=pct+'%';}
+function renderResults(){
+ const d=collect(),missions=d.missions.filter(Boolean).length,peer=d.peer.filter(Boolean).length,crtCount=(d.crt||[]).filter(x=>String(x||'').trim()).length+((d.crtChecks||[]).some(Boolean)?1:0)+(d.crt5?1:0);
+ const crtDone=d.crtSaved?7:crtCount;
+ $('#statMissions').textContent=missions+'/6';$('#statQuiz').textContent=state.quizScore===null?'—':state.quizScore+'/100';$('#statPeer').textContent=peer+'/5';$('#statCRT').textContent=(state.crtSaved?'7':Math.min(7,crtCount))+'/7';
+ $('#profileSummary').innerHTML=`<p><b>Nama:</b> ${esc(d.name||'Belum diisi')}<br><b>Kelas:</b> ${esc(d.className||'Belum diisi')}<br><b>Diagnostik:</b> ${state.diag===null?'Belum dikerjakan':state.diag+'/5'}<br><b>Jalur belajar:</b> ${esc(state.level)}<br><b>Misi selesai:</b> ${missions}/6<br><b>Skor kuis:</b> ${state.quizScore===null?'Belum dikerjakan':state.quizScore+'/100'}<br><b>Peer assessment:</b> ${peer}/5 indikator teramati<br><b>Smart Play:</b> ${Object.keys(smartData.answers||{}).length}/3 skenario<br><b>Skill Passport:</b> ${(smartData.skills||[]).filter(Boolean).length}/5 indikator refleksi diri<br><b>Aktivitas CRT:</b> ${state.crtSaved?'Tersimpan':'Belum disimpan'}<br><b>Refleksi:</b> ${state.reflectionSaved?'Tersimpan':'Belum disimpan'}</p>`;
+ const crtLabels=['Pengalaman lingkungan','Budaya gerak','Bahasa sederhana','Jalur belajar','Koneksi kehidupan','Cerita setelah bergerak'];const crtVals=[d.crt?.[0],d.crt?.[1],d.crt?.[2],d.crt5,d.crt?.[3],d.crt?.[4]];
+ $('#crtSummary').innerHTML=state.crtSaved?crtLabels.map((l,i)=>`<p><b>${l}:</b> ${esc(crtVals[i]||'Belum diisi')}</p>`).join('')+`<p><b>Sikap terhadap teman:</b> ${(d.crtChecks||[]).filter(Boolean).length} pilihan</p>`:'Belum ada aktivitas CRT yang disimpan.';
+ $('#reflectionSummary').innerHTML=state.reflectionSaved?`<p><b>Perasaan:</b> ${esc(d.feeling||'Belum diisi')}<br><b>Keyakinan:</b> ${esc(d.confidence||'Belum diisi')}<br><b>Yang dikuasai:</b> ${esc(d.mastered||'Belum diisi')}<br><b>Yang ingin diperbaiki:</b> ${esc(d.improve||'Belum diisi')}<br><b>Kesimpulan:</b> ${esc(d.conclusion||'Belum diisi')}</p>`:'Belum ada refleksi yang disimpan.';
+ let tips=[];if(Object.keys(smartData.answers||{}).length<3)tips.push('Selesaikan Smart Play Simulator untuk melatih keputusan dalam situasi permainan.');if((smartData.skills||[]).filter(Boolean).length<5)tips.push('Lengkapi Skill Passport setelah praktik dan minta guru mengamati keterampilanmu.');if(state.diag!==null&&state.diag<=2)tips.push('Ulangi istilah dasar dan latih kontrol bola secara bertahap.');if(missions<6)tips.push('Selesaikan misi praktik yang belum dilakukan dengan pengawasan guru.');if(state.quizScore!==null&&state.quizScore<80)tips.push('Baca kembali materi dan jelaskan alasan memilih teknik yang tepat.');if(peer<5)tips.push('Lakukan pengamatan teman sebaya dengan umpan balik yang sopan.');if(!state.crtSaved)tips.push('Simpan aktivitas CRT agar pengalaman dan refleksimu tercatat.');if(!state.reflectionSaved)tips.push('Lengkapi refleksi untuk menentukan target latihan berikutnya.');if(!tips.length)tips.push('Pertahankan latihan yang aman, kerja sama, dan sportivitas. Coba terapkan teknik dalam permainan kecil.');$('#suggestions').innerHTML='<ul>'+tips.map(t=>'<li>'+t+'</li>').join('')+'</ul>';
+ const badges=[['🧭','Penjelajah',state.diag!==null,'Menyelesaikan diagnostik'],['🏀','Praktisi',missions>0,'Menyelesaikan misi'],['🧠','Pemikir',state.quizScore!==null,'Menyelesaikan kuis'],['🤝','Teman Hebat',state.peerSaved,'Peer assessment'],['🌱','Reflektif',state.reflectionSaved,'Menyelesaikan refleksi'],['🌍','Teman Kontekstual',state.crtSaved,'Menyelesaikan aktivitas CRT'],['🧠','Tactical Thinker',Object.keys(smartData.answers||{}).length===3,'Menyelesaikan Smart Play'],['🏆','Quest Complete',missions===6&&state.quizScore!==null&&state.crtSaved&&state.reflectionSaved,'Semua tahap utama selesai']];
+ $('#badgeList').innerHTML=badges.map(b=>`<div class="badge ${b[2]?'':'locked'}"><span style="font-size:1.8rem">${b[0]}</span><b>${b[1]}</b><span class="small">${b[3]}</span></div>`).join('');
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function recapText(){const d=collect();return `REKAP BASKETBALL QUEST 3.0\nNama: ${d.name||'-'}\nKelas: ${d.className||'-'}\nDiagnostik: ${state.diag===null?'-':state.diag+'/5'}\nJalur belajar: ${state.level}\nMisi selesai: ${d.missions.filter(Boolean).length}/6\nSkor kuis: ${state.quizScore===null?'-':state.quizScore+'/100'}\nPeer assessment: ${d.peer.filter(Boolean).length}/5\nSmart Play: ${Object.keys(smartData.answers||{}).length}/3 skenario\nKeputusan tepat: ${Object.entries(smartData.answers||{}).filter(([i,a])=>scenarios[+i]?.correct===a).length}/3\nSkill Passport: ${(smartData.skills||[]).filter(Boolean).length}/5 indikator refleksi diri\nTarget latihan berikutnya: ${smartData.nextTarget||'-'}\nAktivitas CRT: ${state.crtSaved?'Tersimpan':'Belum disimpan'}\nPerasaan: ${d.feeling||'-'}\nYang sudah dikuasai: ${d.mastered||'-'}\nYang ingin diperbaiki: ${d.improve||'-'}\nKesimpulan: ${d.conclusion||'-'}\n\nDibuat dari Basketball Quest 3.0.`}
+$('#printBtn').addEventListener('click',()=>{renderResults();window.print()});
+$('#waBtn').addEventListener('click',()=>{const text=encodeURIComponent(recapText());window.open('https://wa.me/?text='+text,'_blank','noopener')});
+$('#refreshBtn').addEventListener('click',()=>{save();renderResults();showMessage('suggestions',$('#suggestions').innerHTML)});
+$('#resetAll').addEventListener('click',()=>{if(!confirm('Hapus semua data Basketball Quest 2.0 dari browser ini? Tindakan ini tidak dapat dibatalkan.'))return;localStorage.removeItem(KEY);localStorage.removeItem(SMART_KEY);location.reload()});
+load();updateProgress();renderResults();
+</script>
+</body>
+</html>
